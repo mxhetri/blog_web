@@ -1,0 +1,21 @@
+{% extends 'blog/base.html' %}
+{% block title %}
+    {{ post.title }}
+{% endblock %}
+{% block content %}
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.author }} - {{ post.post_date }}
+        {% if user.is_authenticated %}
+            {% if user.id == post.author.id %}
+                <a href="{% url 'blog:update_post' post.pk %}">Edit</a>
+                <a href="{% url 'blog:delete_post' post.pk %}">Delete</a>
+            {% endif %}
+        {% endif %}
+
+    </p>
+
+    <p>{{ post.body }}</p>
+    <br>
+    <a class='btn btn-primary' href="{% url 'blog:post_list' %}">Back</a>
+{% endblock %}
+

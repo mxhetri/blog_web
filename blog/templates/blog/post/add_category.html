@@ -1,0 +1,18 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Add Category {% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <h1>Add Category</h1>
+        <br><br>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-primary">Add category</button>
+        </form>
+
+    {% else %}
+        <h2> You are not allowed to add category </h2>
+    {% endif %}
+{% endblock %}

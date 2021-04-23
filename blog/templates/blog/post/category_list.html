@@ -1,0 +1,10 @@
+{% extends 'blog/base.html' %}
+{% block title %}Category title{% endblock %}
+
+{% block content %}
+    <h1>Categories</h1>
+
+    {% for item in cats_list %}
+        <h3><a href="{% url 'blog:category' item %}">{{ item }}</a></h3>
+    {% endfor %}
+{% endblock %}
