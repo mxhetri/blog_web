@@ -21,4 +21,7 @@ urlpatterns = [
     path('blog/', include('blog.urls', namespace='blog')),
     path('member/',include('django.contrib.auth.urls')),
     path('member/', include('member.urls')),
+    path('social-auth', include('social_django.urls', namespace='social')),
+
+
 ]

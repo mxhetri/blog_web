@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post, Category
-from .forms import PostForm
-from django.urls import reverse_lazy
+from .forms import PostForm, EditForm
+from django.urls import reverse_lazy, reverse
+from django.http import HttpResponseRedirect
 # Create your views here.
 
 
@@ -22,6 +23,19 @@ class PostDetailView(DetailView):
     DetailView.model = Post
     template_name = 'blog/post/post_detail.html'
 
+    def get_context_data(self,*args, **kwargs):
+        context = super(PostDetailView, self).get_context_data(*args, **kwargs)
+        stuff = get_object_or_404(Post, id = self.kwargs['pk'])
+        total_likes = stuff.total_likes()
+        context['total_likes'] = total_likes
+
+        liked = False
+        if stuff.likes.filter(id = self.request.user.id).exists():
+            liked = True
+        context['liked'] = liked
+        print('context value', context)
+        return context
+
 
 class AddPostView(CreateView):
     model = Post
@@ -37,8 +51,8 @@ class AddCategoryView(CreateView):
 
 class UpdatePostView(UpdateView):
     model = Post
+    form_class = EditForm
     template_name = 'blog/post/upate_post.html'
-    fields = ('title', 'body')
 
 
 class DeletePostView(DeleteView):
@@ -60,3 +74,19 @@ def category_list_view(request):
     cats_list = Category.objects.all()
     context = {'cats_list': cats_list}
     return render(request, 'blog/post/category_list.html', context)
+
+
+def post_like_view(request, pk):
+    post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    liked = False
+    # request contains user id if logged in
+    if post.likes.filter(id = request.user.id).exists():
+        # user already liked, unlike now
+        post.likes.remove(request.user)
+        liked = False
+    else:
+        post.likes.add(request.user)
+        liked = True
+    # post.likes.add(request.user)
+    return HttpResponseRedirect(reverse('blog:post_detail', args=[str(pk)]))
+

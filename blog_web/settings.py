@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'django.contrib.sitemaps',
     'member.apps.MemberConfig',
+    'ckeditor',
+    'social_django',
 ]
 
 MIDDLEWARE = [

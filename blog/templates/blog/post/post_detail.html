@@ -11,11 +11,28 @@
                 <a href="{% url 'blog:delete_post' post.pk %}">Delete</a>
             {% endif %}
         {% endif %}
-
     </p>
-
-    <p>{{ post.body }}</p>
+    <p>{{ post.body | safe}}</p>
     <br>
     <a class='btn btn-primary' href="{% url 'blog:post_list' %}">Back</a>
+
+    <br><br>
+    <form action="{% url 'blog:post_like' post.pk %}" method="POST">
+        {% csrf_token %}
+        {% if user.is_authenticated %}
+            {% if liked %}
+                <button type="submit" name="post_id" value="{{ post.id }}"
+                        class="btn btn-danger btn-sm">UnLike
+                </button>
+            {% else %}
+                <button type="submit" name="post_id" value="{{ post.id }}"
+                        class="btn btn-primary btn-sm">Like
+                </button>
+            {% endif %}
+            {{ total_likes }}
+        {% else %}
+            <h3>Must be logged in to like the post</h3>
+        {% endif %}
+    </form>
 {% endblock %}
 
