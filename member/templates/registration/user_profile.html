@@ -1,0 +1,40 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% block title %}{{user_detail.}} Profile {% endblock %}
+
+{% block content %}
+    <h1>Profile Page</h1>
+    <br><br>
+<div class="card mb-3">
+        <div class="row no-gutters">
+            <div class="col-md-2">
+                {% if user_detail.profile_pic %}
+                    <img src="{{ user_detail.profile_pic.url }}" class="card-img">
+                {% else %}
+                    <img src="{% static 'blog/images/default-profile-pic.png' %}"
+                         class="card-img">
+                {% endif %}
+            </div>
+            <div class="col-md-10">
+                <div class="card-body">
+                    <h5 class="card-title">{{user_detail.user.username }}</h5>
+                    <p class="small text-muted">
+
+
+                        {% if user_detail.facebook_url %}
+                         |   <a href="{{ user_detail.facebook_url }}">facebook</a> |
+                        {% endif %}
+                        {% if user_detail.website_url %}
+                            <a href="{{ user_detail.website_url }}">website</a> |
+                        {% endif %}
+                        {% if user_detail.twitter_url %}
+                            <a href="{{ user_detail.twitter_url }}">twitter</a>
+                        {% endif %}
+                    </p>
+                    <p class="card-text">{{ user_detail.bio }}</p>
+                    {#                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>#}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

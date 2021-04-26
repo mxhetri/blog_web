@@ -15,8 +15,26 @@ class Category(models.Model):
         return reverse('blog:post_list')
 
 
+# extend the User profile
+class Profile(models.Model):
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
+    bio = models.TextField()
+    profile_pic = models.ImageField(null=True, blank=True, upload_to='images/profile')
+    website_url = models.CharField(null=True, blank=True, max_length=255)
+    facebook_url = models.CharField(null=True, blank=True, max_length=255)
+    twitter_url = models.CharField(null=True, blank=True, max_length=255)
+
+
+    def __str__(self):
+        return str(self.user)
+
+    def get_absolute_url(self):
+        return reverse('blog:post_list')
+
+
 class Post(models.Model):
     title = models.CharField(max_length=250)
+    header_image = models.ImageField(null=True, blank=True, upload_to='images/')
     author = models.ForeignKey(User, on_delete=models.CASCADE,
                                related_name='posts')
 
